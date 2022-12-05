@@ -11,9 +11,8 @@ for line in stack[::-1]:
 
 part2 = [row[:] for row in stacks]
 
-moves = [[int(move.split(" ")[i]) for i in [1, 3, 5]] for move in moves]
-
-for s, b, e in moves:  # size, beginning, end
+for move in moves:
+    s, b, e = [int(move.split(" ")[i]) for i in [1, 3, 5]]
     stacks[e - 1].extend(stacks[b - 1][-s:][::-1])
     stacks[b - 1] = stacks[b - 1][:-s]
 
