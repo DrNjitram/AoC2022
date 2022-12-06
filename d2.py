@@ -10,7 +10,6 @@ s2 = {
     "A Z": 8, "B Z": 9, "C Z": 7
 }
 
-
 def strategize(lines):
     return sum([s1[line.strip()] for line in lines]), sum([s2[line.strip()] for line in lines])
 

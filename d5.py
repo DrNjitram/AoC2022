@@ -20,5 +20,3 @@ for move in moves:
     part2[b - 1] = part2[b - 1][:-s]
 
 print("".join([s.pop() for s in stacks]), "".join([s.pop() for s in part2]))
-
-
