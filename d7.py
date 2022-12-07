@@ -1,29 +1,3 @@
-from collections import defaultdict
-import json
-# dir : {contents}
-files = []
-folders = defaultdict(int)
-cur_dir = "."
-
-for block in open("d7.txt").read().split("$ ")[1:]:
-    lines = [line for line in block.split("\n") if line != ""]
-
-    if lines[0].startswith("cd"):
-        folder = lines[0].split(" ")[1]
-        match folder:
-            case "/":
-                cur_dir = "./"
-            case "..":
-                cur_dir = "/".join(cur_dir.split("/")[:-1])
-            case _:
-                cur_dir += f"/{folder}"
-    else:
-        for elem in lines[1:]:
-            if not elem.startswith("dir"):
-                size, f = elem.split(" ")
-                files.append(f"{cur_dir}/{size}")
-
-
 def recurse(lst: list) -> dict:
     tmp = {}
     done = []
@@ -43,10 +17,6 @@ def recurse(lst: list) -> dict:
     return tmp
 
 
-answer = 0
-sizes = []
-
-
 def collect(d: dict):
     global answer, sizes
     s = 0
@@ -60,6 +30,30 @@ def collect(d: dict):
         answer += s
     sizes.append(s)
     return s
+
+
+files = []
+cur_dir = "."
+answer = 0
+sizes = []
+
+for block in open("d7.txt").read().split("$ ")[1:]:
+    lines = [line for line in block.split("\n") if line != ""]
+
+    if lines[0].startswith("cd"):
+        folder = lines[0].split(" ")[1]
+        match folder:
+            case "/":
+                cur_dir = "./"
+            case "..":
+                cur_dir = "/".join(cur_dir.split("/")[:-1])
+            case _:
+                cur_dir += f"/{folder}"
+    else:
+        for elem in lines[1:]:
+            if not elem.startswith("dir"):
+                size, f = elem.split(" ")
+                files.append(f"{cur_dir}/{size}")
 
 
 start_path = "./"
