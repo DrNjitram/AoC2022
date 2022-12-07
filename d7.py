@@ -43,11 +43,10 @@ def recurse(lst: list) -> dict:
     return tmp
 
 
-
 answer = 0
-
-
 sizes = []
+
+
 def collect(d: dict):
     global answer, sizes
     s = 0
@@ -67,11 +66,5 @@ start_path = "./"
 nest = recurse([p[len(start_path):] for p in files if p.startswith(start_path)])
 collect(nest)
 
-
-
 print(answer)
-
-
-free = 70000000 - nest["total"]
-
-print(min([size for size in sizes if free + size > 30000000]))
+print(min([size for size in sizes if 70000000 - nest["total"] + size > 30000000]))
