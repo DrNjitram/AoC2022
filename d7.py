@@ -9,16 +9,13 @@ def recurse(lst: list) -> dict:
                 done.append(subpath)
                 tmp[subpath[:-1]] = recurse([p[len(subpath):] for p in lst if p.startswith(subpath)])
         else:  # file
-            if "files" not in tmp:
-                tmp["files"] = int(elem)
-            else:
-                tmp["files"] += int(elem)
+            tmp["files"] = int(elem) + tmp.get("files", 0)
 
     return tmp
 
 
-def collect(d: dict):
-    global answer, sizes
+def collect(d: dict) -> int:
+    global sizes
     s = 0
     for key, value in d.items():
         if type(value) == int:
@@ -26,19 +23,16 @@ def collect(d: dict):
         else:
             s += collect(value)
     d["total"] = s
-    if s < 100000:
-        answer += s
     sizes.append(s)
     return s
 
 
 files = []
 cur_dir = "."
-answer = 0
 sizes = []
 
 for block in open("d7.txt").read().split("$ ")[1:]:
-    lines = [line for line in block.split("\n") if line != ""]
+    lines = [line.strip() for line in block.split("\n") if line != ""]
 
     if lines[0].startswith("cd"):
         folder = lines[0].split(" ")[1]
@@ -46,7 +40,7 @@ for block in open("d7.txt").read().split("$ ")[1:]:
             case "/":
                 cur_dir = "./"
             case "..":
-                cur_dir = "/".join(cur_dir.split("/")[:-1])
+                cur_dir = cur_dir[:cur_dir.rfind("/")]
             case _:
                 cur_dir += f"/{folder}"
     else:
@@ -60,5 +54,5 @@ start_path = "./"
 nest = recurse([p[len(start_path):] for p in files if p.startswith(start_path)])
 collect(nest)
 
-print(answer)
-print(min([size for size in sizes if 70000000 - nest["total"] + size > 30000000]))
+print(sum([size for size in sizes if size < 100000]))
+print(min([size for size in sizes if 40000000 - nest["total"] + size > 0]))
