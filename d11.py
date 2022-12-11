@@ -7,12 +7,7 @@ held = []
 for monkey in [m.split("\n") for m in open("d11.txt").read().split("\n\n")]:
     items = list(map(int, monkey[1].split(":")[1].split(",")))
 
-    if '+' in monkey[2]:
-        operation = eval(f"lambda old: (old + {int(monkey[2].split()[-1])})")
-    elif '* old' in monkey[2]:
-        operation = lambda old: old ** 2
-    else:
-        operation = eval(f"lambda old: (old * {int(monkey[2].split()[-1])})")
+    operation = eval(f"lambda old: {monkey[2].split('=')[1]}")
 
     test = int(monkey[3].split("by")[1])
     t_true = int(monkey[4].split("monkey")[1])
