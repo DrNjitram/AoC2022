@@ -10,7 +10,7 @@ p1 = sum([sum([any([
             all([field[i][x] < field[y][x] for i in range(y)]),  # y above
             all([field[i][x] < field[y][x] for i in range(y + 1, len(field))]),  # y below
             any([x == 0, y == 0, x == len(field[0]) - 1, y == len(field) - 1])
-        ]) for x in range(len(field[0]))]) for y in range(len(field))] )
+        ]) for x in range(len(field[0]))]) for y in range(len(field))])
 
 for x in range(len(field[0])):
     for y in range(len(field)):
@@ -35,5 +35,3 @@ for x in range(len(field[0])):
         visible = max([visible, a * b * c * d])
 
 print(p1, visible)
-
-
