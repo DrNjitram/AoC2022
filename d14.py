@@ -3,9 +3,7 @@ from numpy import linspace
 
 
 def print_map(cave_map):  # disgusting please ignore
-    [print("".join([{0: ".", 1: "#", 2: "o", 3: "+"}[cave_map[(x, y)]] for x in
-                    range(min([p[0] for p in cave_map.keys()]), max([p[0] for p in cave_map.keys()]) + 1)])) for y in
-     range(min([p[1] for p in cave_map.keys()]), max([p[1] for p in cave_map.keys()]) + 1)]
+    [print("".join([{0: ".", 1: "#", 2: "o", 3: "+"}[cave_map[(x, y)]] for x in range(min([p[0] for p in cave_map.keys()]), max([p[0] for p in cave_map.keys()]) + 1)])) for y in range(min([p[1] for p in cave_map.keys()]), max([p[1] for p in cave_map.keys()]) + 1)]
 
 
 cave = defaultdict(int)
@@ -23,7 +21,7 @@ bottom = max([p[1] for p in cave.keys()]) + 2
 for x in linspace(-bottom + 500, bottom + 500, int(2 * bottom + 1)):  # right angled triangles bby
     cave[(int(x), bottom)] = 1
 
-p1 = False
+p1 = 0
 while True:
     sand = [500, 0]
     can_move = True
@@ -37,10 +35,10 @@ while True:
 
     cave[tuple(sand)] = 2
     if sand[1] > bottom - 2 and not p1:
-        p1 = True
-        print(f"Part 1: {list(cave.values()).count(2) - 1}")
+        p1 = list(cave.values()).count(2) - 1  # Do not count last placed grain
     if sand == [500, 0]:
         break
 
 # print_map(cave)
+print(f"Part 1: {p1}")
 print(f"Part 2: {list(cave.values()).count(2)}")
