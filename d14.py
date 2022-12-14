@@ -17,38 +17,15 @@ for points in [[[int(p) for p in pair.split(",")] for pair in trace.strip().spli
             for y in linspace(points[i][1], points[i + 1][1], abs(points[i + 1][1] - points[i][1]) + 1):
                 cave[(int(x), int(y))] = 1
 
-print_map(cave)
+#print_map(cave)
 bottom = max([p[1] for p in cave.keys()])
-
-while True:
-    sand = [500, 0]
-    can_move = True
-    while can_move:
-        can_move = False
-        for next in [[sand[0] + i[0], sand[1] + i[1]] for i in [[0, 1], [-1, 1], [1, 1]]]:
-            if sand[1] > bottom:
-                break
-            if cave[tuple(next)] == 0:
-                can_move = True
-                sand = next
-                break
-
-    if sand[1] > bottom:
-        break
-    cave[tuple(sand)] = 2
-
-print_map(cave)
-print(list(cave.values()).count(2))
-
-for key in cave.keys():
-    if cave[key] == 2:
-        cave[key] = 0
 
 bottom += 2
 
 for x in linspace(-bottom + 500, bottom + 500, int(2 * bottom + 1)):
     cave[(int(x), bottom)] = 1
 
+p1 = False
 while True:
     sand = [500, 0]
     can_move = True
@@ -61,8 +38,11 @@ while True:
                 break
 
     cave[tuple(sand)] = 2
+    if sand[1] > bottom-2 and not p1:
+        p1 = True
+        print(f"Part 1: {list(cave.values()).count(2)-1}")
     if sand == [500, 0]:
         break
 
-print_map(cave)
-print(list(cave.values()).count(2))
+#print_map(cave)
+print(f"Part 2: {list(cave.values()).count(2)}")
