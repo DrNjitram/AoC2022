@@ -27,7 +27,7 @@ while True:
     can_move = True
     while can_move:
         can_move = False
-        for next_p in [[sand[0] + i[0], sand[1] + i[1]] for i in [[0, 1], [-1, 1], [1, 1]]]:
+        for next_p in [[sand[0] + i, sand[1] + 1] for i in [0, -1, 1]]:
             if cave[tuple(next_p)] == 0:
                 can_move = True
                 sand = next_p
