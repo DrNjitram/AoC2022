@@ -8,6 +8,11 @@ def get_data(line):
 
 
 def part2(high):
+    # slow as balls. would be faster to only ever check the perimiter points since only those are ever valid
+    # pseudocode:
+    # for sensor in sensors:
+    #   for point in border_points within range:
+    #       if point within range of 0 sensors: done
     y = 0
     while y < high:
         x = 0
@@ -25,6 +30,7 @@ def part2(high):
                 return x, y
             x += 1
         y += 1
+
 
 
 f = "d15.txt"
