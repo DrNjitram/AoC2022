@@ -30,8 +30,7 @@ def purchase_and_produce(stock: list, robots: list, purchase_index: int):
 
 
 def produce_time(robot, stock, time_left):
-    res = int(stock + (((robot + time_left) * ((robot + time_left) + 1)) / 2) - ((robot * (robot + 1)) / 2))
-    return res
+    return int(stock + (((robot + time_left) * ((robot + time_left) + 1)) / 2) - ((robot * (robot + 1)) / 2))
 
 
 def iterate(bp: Type[Blueprint], robots=(1, 0, 0, 0), stock=(0, 0, 0, 0), time_left=24):
@@ -74,7 +73,7 @@ def iterate(bp: Type[Blueprint], robots=(1, 0, 0, 0), stock=(0, 0, 0, 0), time_l
         if buyable[0]:
             stock_, robots_ = purchase_and_produce(stock, robots, 0)
             results.append(iterate(bp, robots_, stock_, time_left - 1))
-        if not buyable[0] or (stock[1] and not enough_robots[2] or stock[2]):
+        if not buyable[0] or (stock[1] and not enough_robots[2]) or stock[2]:
             stock_, robots_ = purchase_and_produce(stock, robots, -1)
             results.append(iterate(bp, robots_, stock_, time_left - 1))
 

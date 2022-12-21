@@ -1,32 +1,6 @@
 import math
 from collections import defaultdict
 
-rocks = [
-    [[1, 1, 1, 1]],
-    [
-        [0, 1, 0],
-        [1, 1, 1],
-        [0, 1, 0]
-    ],
-    [  # flipped
-        [1, 1, 1],
-        [0, 0, 1],
-        [0, 0, 1]
-    ],
-    [
-        [1],
-        [1],
-        [1],
-        [1]
-    ],
-    [
-        [1, 1],
-        [1, 1]
-    ]
-]
-
-cave = defaultdict(int)
-
 
 def get_height(c):
     return max([y_val for (_, y_val), val in c.items() if val > 0] + [0]) + 4
@@ -57,9 +31,34 @@ def blow(c, r, rx, ry):
         return rx
 
 
+rocks = [
+    [[1, 1, 1, 1]],
+    [
+        [0, 1, 0],
+        [1, 1, 1],
+        [0, 1, 0]
+    ],
+    [  # flipped
+        [1, 1, 1],
+        [0, 0, 1],
+        [0, 0, 1]
+    ],
+    [
+        [1],
+        [1],
+        [1],
+        [1]
+    ],
+    [
+        [1, 1],
+        [1, 1]
+    ]
+]
+cave = defaultdict(int)
 gasses = open("d17.txt").read().strip()
 seen = defaultdict(list)
 step = 0
+
 for i in range(3000):  # random number to get a cycle
     rock = rocks[i % len(rocks)]
     cx = 3
@@ -80,14 +79,14 @@ for i in range(3000):  # random number to get a cycle
     max_y = max([y for (_, y), v in cave.items() if v > 0])
 
     # period finding
-    # rock no, final gas step = round, height
+    # rock no, gas step = round, height
     seen[(i % len(rocks), step % len(gasses))].append([i, max_y])
 
     if i == 2021:
         print(max_y)
 
 
-goal = 1000000000000
+goal = 1_000_000_000_000
 cycle_slope = {}  # cycle increase
 cycle_length = {}  # cycle duration
 for k, v in seen.items():
@@ -103,6 +102,5 @@ for k, v in seen.items():
 # dx/dy
 slope = cycle_slope[k] / cycle_length[k]
 intercept = seen[k][0][1] - slope * seen[k][0][0] - 1  # man i love off by 1
-
 
 print(int(slope * goal + intercept))
