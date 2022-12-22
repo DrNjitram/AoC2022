@@ -1,5 +1,7 @@
 from collections import defaultdict
 
+import numpy as np
+
 
 def mov(pos, d):
     x, y = pos
@@ -19,8 +21,29 @@ def next(pos, d, skip=True, cube=False):
     x, y = mov(pos, d)
     if cube:
         if jungle[(x, y)] == 0:
+            f = face[pos]
+            rel = relations[(f, d)]
             print(x, y)
-            print(face[pos], d)
+            print(f, d)
+            print(relations[(f, d)])
+
+            if f == rel[0]:
+                t = rel[1]
+                d *= rel[2]
+            else:
+                t = rel[0]
+                d *= -rel[0]
+
+            xi, yi = [(x, y) for c, x, y in faces.values() if c == t][0]
+            offset = complex((x // width) - width / 2, (x // width) - width / 2)
+            r_offset = offset * rel[2]
+            t_x = (xi + 0.5) * width
+            t_y = (yi + 0.5) * width
+            print("t_X", t_x, t_y)
+            print("offset", offset, offset * rel[2])
+            print("target", (t_x + np.real(r_offset) - 1, t_y + np.imag(r_offset) - 1))
+            print(t, d)
+            print(faces[t])
             exit()
         else:
             return x, y
@@ -70,34 +93,38 @@ maxs = [max(l) for l in list(zip(*jungle.keys()))]
 print(move(position, direction))
 face = defaultdict(lambda: " ")
 
+width = 4
 faces = {}
+rev_face = {}
 counter = 1
 for x, y in jungle.keys():
     if jungle[(x, y)] != 0:
-        v = x // 4 + y // 4 * 4
+        v = x // width + y // width * ((maxs[0] + 1) // width)
         if v not in faces:
-            faces[v] = counter
+            faces[v] = (counter, x // width, y // width)
+
             counter += 1
-        face[(x, y)] = faces[v]
+        face[(x, y)] = faces[v][0]
 
 for y in range(maxs[1] + 1):
     print("".join([str(face[(x, y)]) for x in range(maxs[0] + 1)]))
 
 relations = {
+    # source face, orientation: face transition
     (4, 1): (4, 6, -1j),
-    (5, ): (5, 2, 2j),
-    (1, ): (1, 2, 2j),
-    (3, ): (3, 1, -1j),
-    (3, ): (3, 5, 1j),
-    (1, ): (1, 6, 2j),
-    (2, ): (2, 6, 1j),
+    (5, -1j): (5, 2, 2j),
+    (1, 1j): (1, 2, 2j),
+    (3, 1j): (3, 1, -1j),
+    (3, -1j): (3, 5, 1j),
+    (1, 1): (1, 6, 2j),
+    (2, -1): (2, 6, 1j),
     (6, 1j): (4, 6, -1j),
-    (5, ): (5, 2, 2j),
-    (1, ): (1, 2, 2j),
-    (3, ): (3, 1, -1j),
-    (3, ): (3, 5, 1j),
-    (1, ): (1, 6, 2j),
-    (2, ): (2, 6, 1j),
+    (2, -1j): (5, 2, 2j),
+    (2, 1j): (1, 2, 2j),
+    (1, -1): (3, 1, -1j),
+    (5, -1): (3, 5, 1j),
+    (6, 1): (1, 6, 2j),
+    (6, -1j): (2, 6, 1j),
 }
 
 print(move(position, direction, True))
